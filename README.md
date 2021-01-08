@@ -8,8 +8,8 @@ Install project dependencies:
 yarn
 ```
 
-Run the project:
+Run npm on port 3000 (important!):
 
 ```bash
-yarn start
+npm start
 ```
