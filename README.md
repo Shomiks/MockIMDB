@@ -1,4 +1,4 @@
-# Easy User Authentication for React Apps
+# IMDB Mock app with API
 
 ## Get Started
 
