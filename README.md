@@ -8,7 +8,7 @@ Install project dependencies:
 yarn
 ```
 
-Run the project:
+Run the project on localhost:3000 !important :
 
 ```bash
 yarn start
