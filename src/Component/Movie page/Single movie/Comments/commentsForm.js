@@ -11,15 +11,18 @@ const WriteCommentError = styled.div`
 
 const CommentTextarea = styled.textarea`
     width: 100%;
+    min-height: 100px;
 `;
 
 const CommentForm = () => {
-    const [comments, setComments] = useContext(CommentsContext);
+    const [movie, setMovie] = useContext(CommentsContext);
+    const comments = movie.comments;
     const { register, handleSubmit, errors, reset } = useForm();
     const useRouter = () => useContext(RouterContext);
     const {match} = useRouter();
     const movieId = match.params.id;
     const lastCommentId = comments.length ? comments[comments.length - 1].id : 0;
+
     const onSubmit = comment => {
         reset();
         const newComment = {
@@ -30,7 +33,11 @@ const CommentForm = () => {
         };
         axios.post(`https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/movies/${movieId}/comments`, {
             ...newComment
-        }).then(setComments([...comments, newComment]));
+        })
+            .then(setMovie(prevState => ({
+                ...prevState, comments: [...comments, newComment]
+            })))
+            .catch( () => alert('Maximum API requests reached'));
     };
 
     return <form onSubmit={handleSubmit(onSubmit)}>

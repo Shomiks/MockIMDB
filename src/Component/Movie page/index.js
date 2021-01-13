@@ -1,10 +1,6 @@
 import React from 'react';
 import SingeMovie from './Single movie';
 
-const HomePage = () => {
-
-    return <SingeMovie/>
-
-};
+const HomePage = () => <SingeMovie/>;
 
 export default HomePage;

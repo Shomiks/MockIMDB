@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {__RouterContext as RouterContext} from 'react-router';
-import {singleMovieData} from '../../Home page/Movies/useMovies';
+import {singleMovieData} from '../../Home page/Movies/useMoviesApi';
 
 export const useSingleMovie = () => {
 
@@ -10,21 +10,18 @@ export const useSingleMovie = () => {
 
     const [movie, setMovie] = useState({});
     const [loading, setLoading] = useState(true);
-    const [comments, setComments] = useState({});
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const {movie, comments} = await (singleMovieData(movieId));
-            setComments(comments.data);
-            setMovie(movie.data);
+        const fetchMovie = async () => {
+            const {movie, comments, trailer} = await (singleMovieData(movieId));
+            setMovie({...movie.data, ...trailer.data, comments: comments.data});
         };
-        fetchUsers().then(() => setLoading(false));
-    }, []);
+        fetchMovie().then(() => setLoading(false));
+    }, [setMovie]);
 
     return {
         movie,
-        comments,
         loading,
-        setComments
+        setMovie
     }
 };

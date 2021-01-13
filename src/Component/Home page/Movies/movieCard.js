@@ -9,7 +9,8 @@ const MovieCard = styled(Paper)`
     margin-bottom: 5px;
     background: ${index => index.index % 2 === 0 ? 'initial' : '#f6f6f5 !important'};
     @media (max-width: 500px) {
-        width: 300px;
+    width: 80%;
+    margin: 10px auto;
   }
 `;
 
@@ -24,14 +25,15 @@ const StyledLink = styled(Link)`
 // eslint-disable-next-line react/prop-types
 const MoviesListing = ({movies, selectedCategory}) =>
 // eslint-disable-next-line react/prop-types
-    <List>{movies.map((movie, index) =>
-    {
-        return (selectedCategory != '0' ? movie.categoryId == selectedCategory : true) && <MovieCard index={index} key={movie.id}>
-            <StyledLink to={`movies/${movie.id}`}>
-                <ListItemText>{movie.name}</ListItemText>
-            </StyledLink>
-            <ListItemText>{movie.description}</ListItemText>
-        </MovieCard>})}
+    <List>{movies.map((movie, index) => {
+        return (selectedCategory != '0' ? movie.categoryId == selectedCategory : true) &&
+            <MovieCard index={index} key={movie.id}>
+                <StyledLink to={`movies/${movie.id}`}>
+                    <ListItemText>{movie.name}</ListItemText>
+                </StyledLink>
+                <ListItemText>{movie.description}</ListItemText>
+            </MovieCard>;
+    })}
     </List>;
 
 export default MoviesListing;

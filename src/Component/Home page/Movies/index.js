@@ -1,18 +1,21 @@
 import React, {createContext, useState} from 'react';
 import styled from 'styled-components';
 import MoviesListing from './movieCard';
-import {useMovies} from './useMovies';
-import CategoriesListing from './categoryList';
+import {useMoviesApi} from './useMoviesApi';
+import CategoriesListing from './Categories';
 import PageLoader from '../../../lib/Loader';
 
 const MainContainer = styled.div`
     margin-bottom: 30px;
+    @media (max-width: 500px) {
+    text-align: center;
+  }
 `;
 
 export const CategoryContext = createContext(undefined);
 
 const Movies = () => {
-    const {movies, categories, loading} = useMovies();
+    const {movies, categories, loading} = useMoviesApi();
     const [selectedCategory, setSelectedCategory] = useState('0');
 
     return (

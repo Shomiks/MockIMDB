@@ -9,10 +9,6 @@ const Listing = styled.div`
     height: 100%;
 `;
 
-const HomePage = () => {
-
-    return (
-            <><Listing><Movies/></Listing></>)
-};
+const HomePage = () => <Listing><Movies/></Listing>;
 
 export default HomePage;
