@@ -1,50 +1,71 @@
-import React, {useContext} from 'react';
-import styled from 'styled-components';
-import {useForm} from 'react-hook-form';
-import {__RouterContext as RouterContext} from 'react-router';
-import {CommentsContext} from '../index';
-import axios from 'axios';
+import React, { useContext } from "react";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import { __RouterContext as RouterContext } from "react-router";
+import { CommentsContext } from "../index";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const WriteCommentError = styled.div`
-    color: red;
+  color: red;
 `;
 
 const CommentTextarea = styled.textarea`
-    width: 100%;
-    min-height: 100px;
+  width: 100%;
+  min-height: 100px;
+`;
+
+const Input = styled.input`
+  cursor: pointer;
+  margin-top: 10px;
 `;
 
 const CommentForm = () => {
-    const [movie, setMovie] = useContext(CommentsContext);
-    const comments = movie.comments;
-    const { register, handleSubmit, errors, reset } = useForm();
-    const useRouter = () => useContext(RouterContext);
-    const {match} = useRouter();
-    const movieId = match.params.id;
-    const lastCommentId = comments.length ? comments[comments.length - 1].id : 0;
+  const [movie, setMovie] = useContext(CommentsContext);
+  const { user } = useAuth0();
+  const comments = movie.comments;
+  const { register, handleSubmit, errors, reset } = useForm();
+  const useRouter = () => useContext(RouterContext);
+  const { match } = useRouter();
+  const movieId = match.params.id;
+  const lastCommentId = comments.length
+    ? comments[comments.length - 1].id + 1
+    : 0;
 
-    const onSubmit = comment => {
-        reset();
-        const newComment = {
-            createdAt: new Date(),
-            text: comment.text,
-            id: lastCommentId + 1,
-            movieId: movieId
-        };
-        axios.post(`https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/movies/${movieId}/comments`, {
-            ...newComment
-        })
-            .then(setMovie(prevState => ({
-                ...prevState, comments: [...comments, newComment]
-            })))
-            .catch( () => alert('Maximum API requests reached'));
+  const onSubmit = (comment) => {
+    reset();
+    const newComment = {
+      comment: comment.text,
+      movieId: parseInt(movieId),
+      user: user.nickname,
+      id: lastCommentId
     };
+    axios
+      .post(`http://localhost:5000/api/comments?movieId=${movieId}`, {
+        ...newComment,
+      })
+      .then(
+        setMovie((prevState) => ({
+          ...prevState,
+          comments: [...comments, newComment],
+        }))
+      )
+      .catch(() => alert("Bad api call"));
+  };
 
-    return <form onSubmit={handleSubmit(onSubmit)}>
-        <CommentTextarea placeholder="Write comment" name="text" ref={register({required: true})}/>
-        <input type="submit"/>
-        {errors.text && <WriteCommentError>This field is required</WriteCommentError>}
-    </form>;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <CommentTextarea
+        placeholder="Write comment"
+        name="text"
+        ref={register({ required: true })}
+      />
+      <Input type="submit" />
+      {errors.text && (
+        <WriteCommentError>Please start typing</WriteCommentError>
+      )}
+    </form>
+  );
 };
 
 export default CommentForm;

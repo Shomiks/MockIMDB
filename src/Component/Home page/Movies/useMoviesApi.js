@@ -1,38 +1,46 @@
-import axios from 'axios';
-import { useEffect, useState} from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const apiKey = 'k_f1xb5k3v';
+const apiKey = "k_f1xb5k3v";
 
-export async function singleMovieData(id) {
-    const movie = await axios(`https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/movies/${id}`);
-    const comments = await axios(`https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/movies/${id}/comments`);
-    const trailer = await axios(`https://imdb-api.com/API/YouTubeTrailer/${apiKey}/${movie.data.imdbId}`);
+export async function singleMovieData(id, nickname) {
+  const movie = await axios(`http://localhost:5000/api/movies/${id}`);
+  const comments = await axios(
+    `http://localhost:5000/api/comments?movieId=${id}`
+  );
+  const users = nickname && await axios.put(`http://localhost:5000/api/users`, {
+    nickname: nickname
+  });
+  const trailer = await axios(
+    `https://imdb-api.com/API/YouTubeTrailer/${apiKey}/${movie.data.imdbId}`
+  );
 
-    return {
-        movie,
-        comments,
-        trailer
-    };
+  return {
+    movie,
+    comments,
+    trailer,
+    users,
+  };
 }
 
 export const useMoviesApi = () => {
-    const [movies, setMovies] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchMovies = async () => {
-            const categories = await axios("https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/categories");
-            const movies = await axios("https://5fe8885b2e12ee0017ab47c0.mockapi.io/api/v1/movies");
-            setCategories(categories.data);
-            setMovies(movies.data);
-        };
-        fetchMovies().then(() => setLoading(false));
-    }, []);
-
-    return {
-        movies,
-        categories,
-        loading
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const categories = await axios("http://localhost:5000/api/categories");
+      const movies = await axios("http://localhost:5000/api/movies");
+      setCategories(categories.data);
+      setMovies(movies.data);
     };
+    fetchMovies().then(() => setLoading(false));
+  }, []);
+
+  return {
+    movies,
+    categories,
+    loading,
+  };
 };
