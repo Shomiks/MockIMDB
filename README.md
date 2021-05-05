@@ -10,6 +10,7 @@ yarn
 
 ## Database
 
+testdb
 root
 root1234
 
