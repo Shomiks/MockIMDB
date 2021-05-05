@@ -8,6 +8,11 @@ Install project dependencies:
 yarn
 ```
 
+## Database
+
+root
+root1234
+
 Run the project on localhost:3000 !important :
 
 ```bash
