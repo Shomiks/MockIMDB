@@ -8,6 +8,22 @@ Install project dependencies:
 yarn
 ```
 
+## Database
+
+testdb
+root
+root1234
+
+## Frontend
+
+Run in terminal from backend folder: 
+
+```bash
+node server.js
+```
+
+## Frontend
+
 Run the project on localhost:3000 !important :
 
 ```bash
